@@ -1,0 +1,36 @@
+{
+    "name": "saritasa/php-chat-api",
+    "type": "library",
+    "description": "Classes, that implement chat API on top of laravel",
+    "keywords": ["laravel", "api", "chat"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Populov",
+            "email": "sergey@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "illuminate/http": "5.*",
+        "illuminate/support": "5.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4" : {
+            "Saritasa\\Laravel\\Chat\\": "src/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
