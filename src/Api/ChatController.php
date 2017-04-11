@@ -3,12 +3,12 @@
 namespace Saritasa\Laravel\Chat\Api;
 
 use App\Extensions\CurrentApiUserTrait;
-use App\Model\Entities\Chat;
-use App\Model\Entities\User;
-use App\Model\Repositories\ChatRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Saritasa\Database\Eloquent\Models\User;
 use Saritasa\DingoApi\BaseApiController;
+use Saritasa\Laravel\Chat\Models\Chat;
+use Saritasa\Laravel\Chat\Repositories\ChatRepository;
 
 class ChatController extends BaseApiController
 {
@@ -51,7 +51,7 @@ class ChatController extends BaseApiController
      */
     public function create(Request $request)
     {
-        $sender = $this->getCurrentUser();
+        $sender = $this->user();
         $this->validate($request, [
             'user_id' => 'required|integer|exists:users,id|not_in:'.$sender->id,
         ]);
@@ -68,7 +68,7 @@ class ChatController extends BaseApiController
      */
     public function get(Chat $chat)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->user();
         $this->chatRepo->validateChatMember($user, $chat);
         $chat->load('participants');
         return $chat;
@@ -83,7 +83,7 @@ class ChatController extends BaseApiController
      */
     public function sendMessage(Chat $chat, Request $request)
     {
-        $sender = $this->getCurrentUser();
+        $sender = $this->user();
         $this->validate($request, [
             'message' => 'required|max:500',
         ]);
@@ -107,7 +107,7 @@ class ChatController extends BaseApiController
         $last_time = $request->query('last_time', null);
         $last_time = $last_time ? Carbon::createFromFormat('Y-m-d H:i:s', $last_time) : null;
 
-        $user = $this->getCurrentUser();
+        $user = $this->user();
 
         $paginator = $this->chatRepo->getMessages($user, $chat, $last_time, $limit, $page);
         return $this->pager($paginator);
@@ -121,7 +121,7 @@ class ChatController extends BaseApiController
      */
     public function readMessages(Chat $chat)
     {
-        $this->chatRepo->changeReadStatus($this->getCurrentUser(), $chat, true);
+        $this->chatRepo->changeReadStatus($this->user(), $chat, true);
         return $this->json(['message' => trans('chats.marked_read')]);
     }
 
@@ -133,7 +133,7 @@ class ChatController extends BaseApiController
      */
     public function leaveChat(Chat $chat)
     {
-        $user = $this->getCurrentUser();
+        $user = $this->user();
         $this->chatRepo->changeNotificationStatus($user, $chat);
         return $this->json(['message' => trans('chats.notification_off')]);
 

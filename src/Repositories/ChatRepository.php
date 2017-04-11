@@ -6,11 +6,10 @@ use Saritasa\Laravel\Chat\Models\Chat;
 use Saritasa\Laravel\Chat\Models\ChatMessage;
 use Saritasa\Laravel\Chat\Models\ChatParticipant;
 use Carbon\Carbon;
-use DB;
 use Saritasa\Database\Eloquent\Models\User;
 use Saritasa\Exceptions\NotFoundException;
 
-class ChatRepository extends BaseRepository
+class ChatRepository
 {
     /**
      * @param $sender
