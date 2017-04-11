@@ -5,10 +5,10 @@ like API authentication, notification message list, notification settings, etc.
 
 ## Laravel 5.x
 
-Install the ```saritasa/php-chat-api``` package:
+Install the ```saritasa/php-laravel-chat-api``` package:
 
 ```bash
-$ composer require saritasa/php-chat-api
+$ composer require saritasa/php-laravel-chat-api
 ```
 
 Add the ChatServiceProvider service provider in ``config/app.php``:

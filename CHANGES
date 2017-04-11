@@ -1,9 +1,8 @@
 1.0.0
 -----
 
-- Initial version:
-
-IDataTransformer
-BaseTransformer
-LimitFieldsTransformer
-CombineTransformer
+- Initial version
+Models: Chat, ChatParticipant, ChatMessage
+Controller: ChatController
+Events: ChatCreated, MessageCreated, LeaveChat
+Exceptions: ChatException

@@ -1,5 +1,5 @@
 {
-    "name": "saritasa/php-chat-api",
+    "name": "saritasa/php-laravel-chat-api",
     "type": "library",
     "description": "Classes, that implement chat API on top of laravel",
     "keywords": ["laravel", "api", "chat"],
