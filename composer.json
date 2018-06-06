@@ -24,7 +24,7 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4" : {
-            "Saritasa\\Laravel\\Chat\\": "src/"
+            "Saritasa\\LaravelChatApi\\": "src/"
         }
     },
     "config": {
@@ -33,7 +33,12 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Saritasa\\LaravelChatApi\\LaravelChatApiServiceProvider"
+            ]
         }
     },
     "repositories": [
