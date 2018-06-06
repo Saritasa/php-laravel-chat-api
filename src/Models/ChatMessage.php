@@ -1,10 +1,10 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Models;
+namespace Saritasa\LaravelChatApi\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
-use Saritasa\Database\Eloquent\Entity;
-use Saritasa\Database\Eloquent\Models\User;
+use Saritasa\Laravel\Chat\Contracts\IChatMessage;
 
 /**
  * App\Model\Entities\ChatMessage
@@ -23,9 +23,8 @@ use Saritasa\Database\Eloquent\Models\User;
  * @method static Builder|ChatMessage whereChatId($value)
  * @method static Builder|ChatMessage whereCreatedAt($value)
  * @method static Builder|ChatMessage whereUpdatedAt($value)
- * @mixin \Eloquent
  */
-class ChatMessage extends Entity
+class ChatMessage extends Model implements IChatMessage
 {
     public $timestamps = true;
 
@@ -67,5 +66,10 @@ class ChatMessage extends Entity
     public function chat()
     {
         return $this->belongsTo(Chat::class);
+    }
+
+    public function getMessage(): string
+    {
+        return $this->getMessage();
     }
 }

@@ -1,36 +1,33 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Models;
+namespace Saritasa\LaravelChatApi\Models;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Builder;
-use Saritasa\Database\Eloquent\Entity;
-use Saritasa\Database\Eloquent\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Saritasa\Laravel\Chat\Contracts\IChat;
+use Saritasa\Laravel\Chat\Contracts\IChatParticipant;
+use Saritasa\Laravel\Chat\Contracts\IChatUser;
 
 /**
  * App\Model\Entities\Chat
  *
  * @property int $id
  * @property string $name
- * @property Collection $notification_off
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static Builder|Chat whereCreatedAt($value)
- * @method static Builder|Chat whereId($value)
- * @method static Builder|Chat whereName($value)
- * @method static Builder|Chat whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property-read null $is_read
+ * @property bool $is_closed
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property-read Collection|User[] $participants
  * @property-read Collection|ChatMessage[] $messages
  */
-class Chat extends Entity
+class Chat extends Model implements IChat
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name'
     ];
-
-    protected $hidden = [];
 
     protected $appends = [
         'is_read',
@@ -54,39 +51,20 @@ class Chat extends Entity
     }
 
     /**
-     * @return null
+     * @return \Illuminate\Support\Collection|IChatParticipant[]
      */
-    public function getIsReadAttribute()
+    public function getParticipants(): Collection
     {
-        $currentUser = \Auth::user();
-        if ($currentUser) {
-            $chatParticipant = $this->hasMany(ChatParticipant::class)->where('user_id', $currentUser->id)->first();
-            return $chatParticipant ? $chatParticipant->is_read : null;
-        }
-        return null;
+        // TODO: Implement getParticipants() method.
     }
 
-    /**
-     * @return mixed
-     */
-    public function getNotificationOffAttribute()
+    public function getCreator(): IChatUser
     {
-        return $this->hasMany(ChatParticipant::class)
-            ->where('notification_off', 1)
-            ->select('user_id')
-            ->get();
+        // TODO: Implement getCreator() method.
     }
 
-    /**
-     * @param User $sender
-     * @return User|null
-     */
-    public function getReceiver(User $sender)
+    public function inChat(IChatUser $chatUser): bool
     {
-        return $this->participants()
-            ->wherePivot('user_id', '<>', $sender->id)
-            ->first();
+        // TODO: Implement inChat() method.
     }
-
-    
 }

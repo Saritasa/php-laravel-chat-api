@@ -1,38 +1,18 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Events;
+namespace Saritasa\LaravelChatApi\Events;
 
-use App\Model\Entities\Chat;
-use App\Model\Entities\User;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Queue\SerializesModels;
+use Saritasa\Laravel\Chat\Contracts\IChat;
+use Saritasa\Laravel\Chat\Contracts\IChatUser;
 
-class LeaveChat extends ChatEvent implements ShouldBroadcast
+class LeaveChat extends ChatEvent
 {
-    use SerializesModels;
+    public $leaver;
 
-    protected $channel;
-
-    public $action;
-
-    public function __construct(User $sender, Chat $chat)
+    public function __construct(IChatUser $leaver, IChat $chat)
     {
-        $receiver = $chat->getReceiver($sender);
-        $this->channel = $receiver->pusher_channel;
-        $this->action = [
-            'type' => 'leave',
-            'user_id' => $sender->id,
-            'chat_id' => $chat->id,
-        ];
-    }
-
-    /**
-     * Get the channels the event should be broadcast on.
-     *
-     * @return array
-     */
-    public function broadcastOn()
-    {
-        return [static::EVENT_MESSAGE_CREATED . $this->channel];
+        parent::__construct($chat->getId());
+        $this->leaver = $leaver;
     }
 }
