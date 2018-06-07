@@ -5,6 +5,7 @@ namespace Saritasa\LaravelChatApi\Services;
 use Closure;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Eloquent\Model;
 use Saritasa\LaravelChatApi\Contracts\IChat;
 use Saritasa\LaravelChatApi\Contracts\IChatMessage;
 use Saritasa\LaravelChatApi\Contracts\IChatParticipant;
@@ -82,7 +83,7 @@ class ChatService implements IChatService
         $this->entityServiceFactory = $entityServiceFactory;
         $this->dispatcher = $dispatcher;
         $this->connection = $connection;
-        $this->chatEntityService = $this->entityServiceFactory->build(Chat::class);
+        $this->chatEntityService = $this->entityServiceFactory->build(config('laravel_chat_api.chatModelClass'));
         $this->participantEntityService = $this->entityServiceFactory->build(ChatParticipant::class);
     }
 
@@ -139,7 +140,7 @@ class ChatService implements IChatService
         /**
          * Chat to delete.
          *
-         * @var Chat $chat
+         * @var Model $chat
          */
         $this->chatEntityService->delete($chat);
         event(new ChatClosedEvent($chatId));

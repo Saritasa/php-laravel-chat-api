@@ -36,11 +36,6 @@ class Chat extends Model implements IChat
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
 
-    protected $with = [
-        'users',
-        'participants',
-    ];
-
     protected $fillable = [
         self::NAME,
         self::IS_CLOSED,

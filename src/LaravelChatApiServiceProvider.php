@@ -3,6 +3,8 @@
 namespace Saritasa\LaravelChatApi;
 
 use Illuminate\Support\ServiceProvider;
+use Saritasa\LaravelChatApi\Contracts\IChatService;
+use Saritasa\LaravelChatApi\Services\ChatService;
 
 class LaravelChatApiServiceProvider extends ServiceProvider
 {
@@ -28,4 +30,11 @@ class LaravelChatApiServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel_chat_api.php', 'laravel_chat_api');
     }
 
+    /**
+     * Register bindings.
+     */
+    public function registerBindings(): void
+    {
+        $this->app->bind(IChatService::class, ChatService::class);
+    }
 }

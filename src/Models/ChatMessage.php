@@ -58,7 +58,7 @@ class ChatMessage extends Model implements IChatMessage
      */
     public function chat(): BelongsTo
     {
-        return $this->belongsTo(Chat::class);
+        return $this->belongsTo(config('laravel_chat_api.chatModelClass'));
     }
 
     /**
@@ -95,7 +95,7 @@ class ChatMessage extends Model implements IChatMessage
         return [
             static::MESSAGE => 'required|string',
             static::USER_ID => 'required|exists:' . config('laravel_chat_api.usersTable') . ',id',
-            static::CHAT_ID => 'required|exists:chats,id',
+            static::CHAT_ID => 'required|exists:' . config('laravel_chat_api.chatsTable') . ',id',
         ];
     }
 }

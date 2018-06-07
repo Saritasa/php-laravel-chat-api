@@ -19,7 +19,7 @@ interface IChatUser
      *
      * @param IChat $chat Chat in which participant info need to get
      *
-     * @return IChatParticipant
+     * @return IChatParticipant|null
      */
-    public function getChatParticipant(IChat $chat): IChatParticipant;
+    public function getChatParticipant(IChat $chat): ?IChatParticipant;
 }
