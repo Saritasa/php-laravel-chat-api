@@ -5,9 +5,9 @@ namespace Saritasa\LaravelChatApi\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Saritasa\Laravel\Chat\Contracts\IChat;
-use Saritasa\Laravel\Chat\Contracts\IChatParticipant;
-use Saritasa\Laravel\Chat\Contracts\IChatUser;
+use Saritasa\LaravelChatApi\Contracts\IChat;
+use Saritasa\LaravelChatApi\Contracts\IChatParticipant;
+use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
 /**
  * App\Model\Entities\ChatParticipant

@@ -1,6 +1,6 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Contracts;
+namespace Saritasa\LaravelChatApi\Contracts;
 
 /**
  * User who is a member of the chats.

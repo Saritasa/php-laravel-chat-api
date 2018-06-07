@@ -1,17 +1,17 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Services;
+namespace Saritasa\LaravelChatApi\Services;
 
 use Closure;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
-use Saritasa\Laravel\Chat\Contracts\IChat;
-use Saritasa\Laravel\Chat\Contracts\IChatMessage;
-use Saritasa\Laravel\Chat\Contracts\IChatParticipant;
-use Saritasa\Laravel\Chat\Contracts\IChatUser;
-use Saritasa\Laravel\Chat\Events\ChatClosed;
-use Saritasa\Laravel\Chat\Notifications\ChatClosedNotification;
-use Saritasa\Laravel\Chat\Notifications\NewMessageNotification;
+use Saritasa\LaravelChatApi\Contracts\IChat;
+use Saritasa\LaravelChatApi\Contracts\IChatMessage;
+use Saritasa\LaravelChatApi\Contracts\IChatParticipant;
+use Saritasa\LaravelChatApi\Contracts\IChatUser;
+use Saritasa\LaravelChatApi\Events\ChatClosed;
+use Saritasa\LaravelChatApi\Notifications\ChatClosedNotification;
+use Saritasa\LaravelChatApi\Notifications\NewMessageNotification;
 use Saritasa\LaravelChatApi\Contracts\IChatService;
 use Saritasa\LaravelChatApi\Events\ChatCreated;
 use Saritasa\LaravelChatApi\Events\LeaveChat;

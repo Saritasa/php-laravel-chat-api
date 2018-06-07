@@ -1,8 +1,6 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Events;
-
-use Saritasa\LaravelChatApi\Events\ChatEvent;
+namespace Saritasa\LaravelChatApi\Events;
 
 class ChatClosed extends ChatEvent
 {

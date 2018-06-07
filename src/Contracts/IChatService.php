@@ -2,9 +2,6 @@
 
 namespace Saritasa\LaravelChatApi\Contracts;
 
-use Saritasa\Laravel\Chat\Contracts\IChat;
-use Saritasa\Laravel\Chat\Contracts\IChatMessage;
-use Saritasa\Laravel\Chat\Contracts\IChatUser;
 use Saritasa\LaravelChatApi\Exceptions\ChatException;
 use Saritasa\LaravelEntityServices\Exceptions\EntityServiceOperationException;
 

@@ -2,8 +2,8 @@
 
 namespace Saritasa\LaravelChatApi\Events;
 
-use Saritasa\Laravel\Chat\Contracts\IChat;
-use Saritasa\Laravel\Chat\Contracts\IChatUser;
+use Saritasa\LaravelChatApi\Contracts\IChat;
+use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
 class LeaveChat extends ChatEvent
 {

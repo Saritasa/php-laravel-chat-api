@@ -1,6 +1,6 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Notifications;
+namespace Saritasa\LaravelChatApi\Notifications;
 
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Notification;

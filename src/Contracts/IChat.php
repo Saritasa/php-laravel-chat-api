@@ -1,6 +1,6 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Contracts;
+namespace Saritasa\LaravelChatApi\Contracts;
 
 use Illuminate\Support\Collection;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Saritasa\Laravel\Chat;
+namespace Saritasa\LaravelChatApi;
 
 use Illuminate\Support\ServiceProvider;
 

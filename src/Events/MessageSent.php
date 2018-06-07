@@ -2,9 +2,9 @@
 
 namespace Saritasa\LaravelChatApi\Events;
 
-use Saritasa\Laravel\Chat\Contracts\IChat;
-use Saritasa\Laravel\Chat\Contracts\IChatMessage;
-use Saritasa\Laravel\Chat\Contracts\IChatUser;
+use Saritasa\LaravelChatApi\Contracts\IChat;
+use Saritasa\LaravelChatApi\Contracts\IChatMessage;
+use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
 /**
  * Event fires, when new message is posted to pool chat.

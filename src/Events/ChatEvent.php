@@ -5,7 +5,7 @@ namespace Saritasa\LaravelChatApi\Events;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
-use Saritasa\Laravel\Chat\Contracts\IChat;
+use Saritasa\LaravelChatApi\Contracts\IChat;
 
 /**
  * This is base class for all events

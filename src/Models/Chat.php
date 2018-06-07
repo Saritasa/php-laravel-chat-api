@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Saritasa\Laravel\Chat\Contracts\IChat;
-use Saritasa\Laravel\Chat\Contracts\IChatUser;
+use Saritasa\LaravelChatApi\Contracts\IChat;
+use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
 /**
  * App\Model\Entities\Chat

@@ -5,8 +5,8 @@ namespace Saritasa\LaravelChatApi\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Saritasa\Laravel\Chat\Contracts\IChatMessage;
-use Saritasa\Laravel\Chat\Contracts\IChatUser;
+use Saritasa\LaravelChatApi\Contracts\IChatMessage;
+use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
 /**
  * Message which user send in chat.

@@ -16,7 +16,7 @@ Add the ChatServiceProvider service provider in ``config/app.php``:
 ```php
 'providers' => array(
     // ...
-    Saritasa\Laravel\Chat\ChatServiceProvider::class,
+    Saritasa\LaravelChatApi\ChatServiceProvider::class,
 )
 ```
 
