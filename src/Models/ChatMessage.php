@@ -2,74 +2,69 @@
 
 namespace Saritasa\LaravelChatApi\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Saritasa\Laravel\Chat\Contracts\IChatMessage;
+use Saritasa\Laravel\Chat\Contracts\IChatUser;
 
 /**
- * App\Model\Entities\ChatMessage
+ * Message which user send in chat.
  *
- * @property integer $id
- * @property integer $chat_id
- * @property integer $user_id
+ * @property int $id
+ * @property int $chat_id
+ * @property int $user_id
  * @property string $message
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property User $user
- * @property Chat $chat
- * @method static Builder|ChatMessage whereId($value)
- * @method static Builder|ChatMessage whereUserId($value)
- * @method static Builder|ChatMessage whereMessage($value)
- * @method static Builder|ChatMessage whereChatId($value)
- * @method static Builder|ChatMessage whereCreatedAt($value)
- * @method static Builder|ChatMessage whereUpdatedAt($value)
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
+ * @property IChatUser $user User which one send this message in chat
+ * @property Chat $chat Chat where this message is
  */
 class ChatMessage extends Model implements IChatMessage
 {
-    public $timestamps = true;
+    public const CHAT_ID = 'chat_id';
+    public const USER_ID = 'user_id';
+    public const MESSAGE = 'message';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'update_at';
 
     protected $fillable = [
-        'chat_id',
-        'user_id',
-        'message',
+        self::CHAT_ID,
+        self::USER_ID,
+        self::MESSAGE,
     ];
 
-    protected $guarded = [];
+    protected $dates = [
+        self::CREATED_AT,
+        self::UPDATED_AT,
+    ];
 
     /**
-     * Return common validation rules of all user fields
+     * User which one send this message in chat.
      *
-     * @return array
+     * @return BelongsTo
      */
-    public static function authRules()
+    public function user(): BelongsTo
     {
-        return [
-            'message' => 'required|max:500',
-        ];
+        return $this->belongsTo(config('laravelChatApi.userModelClass'));
     }
 
     /**
-     * Get user object
+     * Get chat where this message is.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get chat object
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function chat()
+    public function chat(): BelongsTo
     {
         return $this->belongsTo(Chat::class);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMessage(): string
     {
-        return $this->getMessage();
+        return $this->message;
     }
 }

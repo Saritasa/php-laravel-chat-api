@@ -5,7 +5,6 @@ namespace Saritasa\LaravelChatApi\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Notifications\Notifiable;
 use Saritasa\Laravel\Chat\Contracts\IChat;
 use Saritasa\Laravel\Chat\Contracts\IChatParticipant;
 use Saritasa\Laravel\Chat\Contracts\IChatUser;
@@ -16,7 +15,6 @@ use Saritasa\Laravel\Chat\Contracts\IChatUser;
  * @property int $id
  * @property int $chat_id
  * @property int $user_id
- * @property bool $isCreator
  * @property bool $notification_off
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -27,8 +25,6 @@ use Saritasa\Laravel\Chat\Contracts\IChatUser;
  */
 class ChatParticipant extends Model implements IChatParticipant
 {
-    use Notifiable;
-
     public const ID = 'id';
     public const IS_READ = 'is_read';
     public const USER_ID = 'user_id';
@@ -37,6 +33,10 @@ class ChatParticipant extends Model implements IChatParticipant
     public const NOTIFICATION_OFF = 'notification_off';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
+
+    protected $with = [
+        'user',
+    ];
 
     protected $fillable = [
         self::CHAT_ID,
@@ -64,19 +64,28 @@ class ChatParticipant extends Model implements IChatParticipant
 
     public function chat(): BelongsTo
     {
-        return $this->belongsTo(config('laravelChatApi.chatModelClass'));
+        return $this->belongsTo(Chat::class);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUser(): IChatUser
     {
         return $this->user;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isNotificationOn(): bool
     {
         return !$this->notification_off;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getId(): string
     {
         return $this->getKey();

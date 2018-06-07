@@ -16,9 +16,12 @@ class CreateChatsTable extends Migration
         Schema::create('chats', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->unsignedInteger('created_by');
             $table->tinyInteger('is_closed');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign(['created_by'])->on(config('laravelChatApi.usersTable'))->references('id');
         });
     }
 

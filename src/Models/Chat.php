@@ -3,11 +3,13 @@
 namespace Saritasa\LaravelChatApi\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Saritasa\Laravel\Chat\Contracts\IChat;
-use Saritasa\Laravel\Chat\Contracts\IChatParticipant;
 use Saritasa\Laravel\Chat\Contracts\IChatUser;
 
 /**
@@ -18,53 +20,123 @@ use Saritasa\Laravel\Chat\Contracts\IChatUser;
  * @property bool $is_closed
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property-read Collection|User[] $participants
+ *
+ * @property-read Collection|IChatUser[] $users
  * @property-read Collection|ChatMessage[] $messages
+ * @property-read Collection|ChatParticipant[] $participants
+ * @property-read IChatUser $createdBy
  */
 class Chat extends Model implements IChat
 {
     use SoftDeletes;
 
-    protected $fillable = [
-        'name'
+    public const NAME = 'name';
+    public const IS_CLOSED = 'is_closed';
+    public const CREATED_BY = 'created_by';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'update_at';
+
+    protected $with = [
+        'users',
+        'participants',
     ];
 
-    protected $appends = [
-        'is_read',
-        'notification_off',
+    protected $fillable = [
+        self::NAME,
+        self::IS_CLOSED,
+        self::CREATED_BY,
+    ];
+
+    public $dates = [
+        self::CREATED_AT,
+        self::UPDATED_AT,
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * Users which participant in chat.
+     *
+     * @return BelongsToMany
      */
-    public function participants()
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'chat_participants');
+        return $this->belongsToMany(config('laravelChatApi.userModelClass'), 'chat_participants');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Chat participants.
+     *
+     * @return HasMany
      */
-    public function messages()
+    public function participants(): HasMany
+    {
+        return $this->hasMany(ChatParticipant::class);
+    }
+
+    /**
+     * Chat creator.
+     *
+     * @return BelongsTo
+     */
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(config('laravelChatApi.userModelClass'), static::CREATED_BY);
+    }
+
+    /**
+     * Messages in this chat.
+     *
+     * @return HasMany
+     */
+    public function messages(): HasMany
     {
         return $this->hasMany(ChatMessage::class);
     }
 
     /**
-     * @return \Illuminate\Support\Collection|IChatParticipant[]
+     * {@inheritdoc}
      */
-    public function getParticipants(): Collection
+    public function getUsers(): Collection
     {
-        // TODO: Implement getParticipants() method.
+        return $this->users;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCreator(): IChatUser
     {
-        // TODO: Implement getCreator() method.
+        return $this->createdBy;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function inChat(IChatUser $chatUser): bool
     {
-        // TODO: Implement inChat() method.
+        return $this->users->contains($chatUser);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId(): string
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isClosed(): bool
+    {
+        return $this->is_closed;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
     }
 }

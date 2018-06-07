@@ -10,9 +10,9 @@ class ChatCreated extends ChatEvent
 {
     public $chatParticipant;
 
-    public function __construct(IChat $chat, IChatParticipant $chatParticipant)
+    public function __construct(IChat $chat, IChatUser $chatUser)
     {
         parent::__construct($chat->getId());
-        $this->chatParticipant = $chatParticipant;
+        $this->chatParticipant = $chatUser;
     }
 }
