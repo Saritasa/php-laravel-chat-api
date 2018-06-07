@@ -9,13 +9,13 @@ use Saritasa\LaravelChatApi\Contracts\IChat;
 use Saritasa\LaravelChatApi\Contracts\IChatMessage;
 use Saritasa\LaravelChatApi\Contracts\IChatParticipant;
 use Saritasa\LaravelChatApi\Contracts\IChatUser;
-use Saritasa\LaravelChatApi\Events\ChatClosed;
+use Saritasa\LaravelChatApi\Events\ChatClosedEvent;
 use Saritasa\LaravelChatApi\Notifications\ChatClosedNotification;
 use Saritasa\LaravelChatApi\Notifications\NewMessageNotification;
 use Saritasa\LaravelChatApi\Contracts\IChatService;
-use Saritasa\LaravelChatApi\Events\ChatCreated;
-use Saritasa\LaravelChatApi\Events\LeaveChat;
-use Saritasa\LaravelChatApi\Events\MessageSent;
+use Saritasa\LaravelChatApi\Events\ChatCreatedEvent;
+use Saritasa\LaravelChatApi\Events\ChatLeavedEvent;
+use Saritasa\LaravelChatApi\Events\MessageSentEvent;
 use Saritasa\LaravelChatApi\Exceptions\ChatException;
 use Saritasa\LaravelChatApi\Models\Chat;
 use Saritasa\LaravelChatApi\Models\ChatMessage;
@@ -82,7 +82,7 @@ class ChatService implements IChatService
         $this->entityServiceFactory = $entityServiceFactory;
         $this->dispatcher = $dispatcher;
         $this->connection = $connection;
-        $this->chatEntityService = $this->entityServiceFactory->build(config('paymentSystem.userModelClass'));
+        $this->chatEntityService = $this->entityServiceFactory->build(Chat::class);
         $this->participantEntityService = $this->entityServiceFactory->build(ChatParticipant::class);
     }
 
@@ -97,13 +97,13 @@ class ChatService implements IChatService
              *
              * @var IChat $chat
              */
-            $chat = $this->chatEntityService->create($chatData);
+            $chat = $this->chatEntityService->create(array_merge($chatData, [Chat::CREATED_BY => $creator->getId()]));
 
             $this->participantEntityService->create([
                 ChatParticipant::USER_ID => $creator->getId(),
                 ChatParticipant::NOTIFICATION_OFF => false,
                 ChatParticipant::CHAT_ID => $chat->getId(),
-                ChatParticipant::IS_READ => false,
+                ChatParticipant::IS_READ => true,
             ]);
 
             foreach ($userIds as $id) {
@@ -118,8 +118,10 @@ class ChatService implements IChatService
                     ChatParticipant::CHAT_ID => $chat->getId(),
                     ChatParticipant::IS_READ => false,
                 ]);
-                event(new ChatCreated($chat, $chatParticipant->getUser()));
+                event(new ChatCreatedEvent($chat, $chatParticipant->getUser()));
             }
+
+            return $chat;
         });
     }
 
@@ -140,7 +142,7 @@ class ChatService implements IChatService
          * @var Chat $chat
          */
         $this->chatEntityService->delete($chat);
-        event(new ChatClosed($chatId));
+        event(new ChatClosedEvent($chatId));
         foreach ($chatUsers as $chatUser) {
             if ($chatUser->getId() === $sender->getId()) {
                 continue;
@@ -170,7 +172,7 @@ class ChatService implements IChatService
                 'message' => $message
             ]);
 
-            event(new MessageSent($chat, $sender, $chatMessage));
+            event(new MessageSentEvent($chat, $sender, $chatMessage));
 
             foreach ($chat->getUsers() as $chatUser) {
                 if ($chatUser->getId() === $sender->getId()) {
@@ -211,7 +213,7 @@ class ChatService implements IChatService
 
             $this->participantEntityService->delete($chatParticipant);
 
-            event(new LeaveChat($chat, $chatUser));
+            event(new ChatLeavedEvent($chat, $chatUser));
         });
     }
 

@@ -34,7 +34,7 @@ class Chat extends Model implements IChat
     public const IS_CLOSED = 'is_closed';
     public const CREATED_BY = 'created_by';
     public const CREATED_AT = 'created_at';
-    public const UPDATED_AT = 'update_at';
+    public const UPDATED_AT = 'updated_at';
 
     protected $with = [
         'users',
@@ -59,7 +59,7 @@ class Chat extends Model implements IChat
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(config('laravelChatApi.userModelClass'), 'chat_participants');
+        return $this->belongsToMany(config('laravel_chat_api.userModelClass'), 'chat_participants');
     }
 
     /**
@@ -79,7 +79,7 @@ class Chat extends Model implements IChat
      */
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(config('laravelChatApi.userModelClass'), static::CREATED_BY);
+        return $this->belongsTo(config('laravel_chat_api.userModelClass'), static::CREATED_BY);
     }
 
     /**
@@ -138,5 +138,19 @@ class Chat extends Model implements IChat
     public function getMessages(): Collection
     {
         return $this->messages;
+    }
+
+    /**
+     * Return validation rules.
+     *
+     * @return array
+     */
+    public function getValidationRules(): array
+    {
+        return [
+            static::NAME => 'required|string',
+            static::CREATED_BY => 'required|exists:' . config('laravel_chat_api.usersTable') . ',id',
+            static::IS_CLOSED => 'bool',
+        ];
     }
 }

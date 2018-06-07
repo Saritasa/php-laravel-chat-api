@@ -17,7 +17,7 @@ class CreateChatsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('created_by');
-            $table->tinyInteger('is_closed');
+            $table->tinyInteger('is_closed')->default(0);
             $table->timestamps();
             $table->softDeletes();
 

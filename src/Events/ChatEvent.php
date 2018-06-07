@@ -5,12 +5,9 @@ namespace Saritasa\LaravelChatApi\Events;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
-use Saritasa\LaravelChatApi\Contracts\IChat;
 
 /**
- * This is base class for all events
- *
- * @package App\Events
+ * Base class for all chat events.
  */
 abstract class ChatEvent implements ShouldBroadcastNow
 {
@@ -19,16 +16,18 @@ abstract class ChatEvent implements ShouldBroadcastNow
     /** Pool chat event channel prefix */
     public const CHANNEL_PREFIX = 'CHAT-';
 
-    /** Push notification events channel prefix */
-    public const EVENT_NOTIFICATION = 'NotificationPush';
-
     /**
-     * Chat
+     * Chat identifier.
      *
-     * @var IChat
+     * @var string
      */
     public $chatId;
 
+    /**
+     * Base class for all chat events.
+     *
+     * @param string $chatId
+     */
     public function __construct(string $chatId)
     {
         $this->chatId = $chatId;
@@ -39,7 +38,7 @@ abstract class ChatEvent implements ShouldBroadcastNow
      *
      * @return string
      */
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         $params = explode('\\', get_called_class());
 

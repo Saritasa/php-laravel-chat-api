@@ -21,7 +21,7 @@ class CreateChatMessagesTable extends Migration
             $table->timestamps();
 
             $table->foreign(['user_id'])
-                ->on(config('laravelChatApi.usersTable'))
+                ->on(config('laravel_chat_api.usersTable'))
                 ->references('id')
                 ->onDelete('CASCADE')
                 ->onUpdate('CASCADE');

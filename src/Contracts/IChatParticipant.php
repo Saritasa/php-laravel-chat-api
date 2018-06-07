@@ -15,6 +15,13 @@ interface IChatParticipant
     public function getUser(): IChatUser;
 
     /**
+     * Get chat.
+     *
+     * @return IChat
+     */
+    public function getChat(): IChat;
+
+    /**
      * Is notification on in the chat ?
      *
      * @return bool
@@ -22,7 +29,7 @@ interface IChatParticipant
     public function isNotificationOn(): bool;
 
     /**
-     * Get patticipants identifier.
+     * Get identifier.
      *
      * @return string
      */

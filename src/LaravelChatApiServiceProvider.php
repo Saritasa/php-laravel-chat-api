@@ -23,9 +23,9 @@ class LaravelChatApiServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/laravel_chat_api.php' =>
                     $this->app->make('path.config') . DIRECTORY_SEPARATOR . 'laravel_chat_api.php',
             ],
-            'laravelChatApi'
+            'laravel_chat_api'
         );
-        $this->mergeConfigFrom(__DIR__ . '/../config/laravel_chat_api.php', 'laravelChatApi');
+        $this->mergeConfigFrom(__DIR__ . '/../config/laravel_chat_api.php', 'laravel_chat_api');
     }
 
 }

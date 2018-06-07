@@ -15,7 +15,6 @@ class CreateChatParticipantsTable extends Migration
     {
         Schema::create('chat_participants', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
             $table->tinyInteger('notification_off')->default(0);
             $table->tinyInteger('is_read')->default(0);
             $table->unsignedInteger('user_id');
@@ -23,7 +22,7 @@ class CreateChatParticipantsTable extends Migration
             $table->timestamps();
 
             $table->foreign(['user_id'])
-                ->on(config('laravelChatApi.usersTable'))
+                ->on(config('laravel_chat_api.usersTable'))
                 ->references('id')
                 ->onDelete('CASCADE')
                 ->onUpdate('CASCADE');

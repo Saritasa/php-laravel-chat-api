@@ -7,13 +7,31 @@ use Saritasa\LaravelChatApi\Contracts\IChatMessage;
 use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
 /**
- * Event fires, when new message is posted to pool chat.
+ * Dispatched when new message is posted to pool chat.
  */
-class MessageSent extends ChatEvent
+class MessageSentEvent extends ChatEvent
 {
+    /**
+     * Message.
+     *
+     * @var string
+     */
     public $message;
+
+    /**
+     * User which send message.
+     *
+     * @var IChatUser
+     */
     public $sender;
 
+    /**
+     * Dispatched when new message is posted to pool chat.
+     *
+     * @param IChat $chat Chat in which message was sent
+     * @param IChatUser $sender User which send message
+     * @param IChatMessage $chatMessage Message
+     */
     public function __construct(IChat $chat, IChatUser $sender, IChatMessage $chatMessage)
     {
         parent::__construct($chat->getId());
