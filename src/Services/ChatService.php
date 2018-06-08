@@ -10,9 +10,9 @@ use Saritasa\LaravelChatApi\Contracts\IChat;
 use Saritasa\LaravelChatApi\Contracts\IChatMessage;
 use Saritasa\LaravelChatApi\Contracts\IChatParticipant;
 use Saritasa\LaravelChatApi\Contracts\IChatUser;
+use Saritasa\LaravelChatApi\Contracts\INotificationsFactory;
+use Saritasa\LaravelChatApi\Enums\NotificationsType;
 use Saritasa\LaravelChatApi\Events\ChatClosedEvent;
-use Saritasa\LaravelChatApi\Notifications\ChatClosedNotification;
-use Saritasa\LaravelChatApi\Notifications\NewMessageNotification;
 use Saritasa\LaravelChatApi\Contracts\IChatService;
 use Saritasa\LaravelChatApi\Events\ChatCreatedEvent;
 use Saritasa\LaravelChatApi\Events\ChatLeavedEvent;
@@ -67,24 +67,34 @@ class ChatService implements IChatService
     protected $connection;
 
     /**
+     * Notifications factory.
+     *
+     * @var INotificationsFactory
+     */
+    protected $notificationsFactory;
+
+    /**
      * Service to work with chat and chat participants.
      *
-     * @param IEntityServiceFactory $entityServiceFactory
-     * @param Dispatcher $dispatcher
-     * @param ConnectionInterface $connection
+     * @param IEntityServiceFactory $entityServiceFactory Entity services factory
+     * @param Dispatcher $dispatcher Notifications dispatcher
+     * @param ConnectionInterface $connection Connection interface realization
+     * @param INotificationsFactory $notificationsFactory Notifications factory
      *
      * @throws EntityServiceException
      */
     public function __construct(
         IEntityServiceFactory $entityServiceFactory,
         Dispatcher $dispatcher,
-        ConnectionInterface $connection
+        ConnectionInterface $connection,
+        INotificationsFactory $notificationsFactory
     ) {
         $this->entityServiceFactory = $entityServiceFactory;
         $this->dispatcher = $dispatcher;
         $this->connection = $connection;
         $this->chatEntityService = $this->entityServiceFactory->build(config('laravel_chat_api.chatModelClass'));
         $this->participantEntityService = $this->entityServiceFactory->build(ChatParticipant::class);
+        $this->notificationsFactory = $notificationsFactory;
     }
 
     /**
@@ -151,7 +161,10 @@ class ChatService implements IChatService
                 if ($chatUser->getId() === $sender->getId()) {
                     continue;
                 }
-                $this->dispatcher->sendNow([$chatUser], new ChatClosedNotification());
+                $this->dispatcher->sendNow(
+                    [$chatUser],
+                    $this->notificationsFactory->build(NotificationsType::CHAT_CLOSED)
+                );
             }
         });
     }
@@ -192,7 +205,10 @@ class ChatService implements IChatService
                 $chatParticipant = $chatUser->getChatParticipant($chat);
 
                 if ($chatParticipant->isNotificationOn()) {
-                    $this->dispatcher->sendNow([$chatUser], new NewMessageNotification());
+                    $this->dispatcher->sendNow(
+                        [$chatUser],
+                        $this->notificationsFactory->build(NotificationsType::NEW_MESSAGE)
+                    );
                 }
                 $this->participantEntityService->update($chatParticipant, [ChatParticipant::IS_READ => false]);
             }
