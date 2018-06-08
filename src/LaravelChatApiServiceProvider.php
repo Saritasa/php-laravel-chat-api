@@ -4,6 +4,8 @@ namespace Saritasa\LaravelChatApi;
 
 use Illuminate\Support\ServiceProvider;
 use Saritasa\LaravelChatApi\Contracts\IChatService;
+use Saritasa\LaravelChatApi\Contracts\INotificationsFactory;
+use Saritasa\LaravelChatApi\Notifications\NotificationsFactory;
 use Saritasa\LaravelChatApi\Services\ChatService;
 
 class LaravelChatApiServiceProvider extends ServiceProvider
@@ -37,5 +39,6 @@ class LaravelChatApiServiceProvider extends ServiceProvider
     public function registerBindings(): void
     {
         $this->app->bind(IChatService::class, ChatService::class);
+        $this->app->bind(INotificationsFactory::class, NotificationsFactory::class);
     }
 }
