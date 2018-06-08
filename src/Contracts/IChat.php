@@ -17,6 +17,8 @@ interface IChat
     public function getUsers(): Collection;
 
     /**
+     * Get identifier.
+     *
      * @return string
      */
     public function getId(): string;
@@ -33,14 +35,14 @@ interface IChat
      *
      * @param IChatUser $chatUser
      *
-     * @return bool
+     * @return boolean
      */
     public function inChat(IChatUser $chatUser): bool;
 
     /**
      * Is chat already closed ?
      *
-     * @return bool
+     * @return boolean
      */
     public function isClosed(): bool;
 

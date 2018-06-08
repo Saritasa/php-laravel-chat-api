@@ -119,4 +119,12 @@ class ChatParticipant extends Model implements IChatParticipant
             static::CHAT_ID => 'required|exists:' . config('laravel_chat_api.chatsTable') . ',id',
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRead(): bool
+    {
+        return $this->is_read;
+    }
 }

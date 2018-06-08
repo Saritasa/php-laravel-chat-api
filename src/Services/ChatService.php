@@ -134,22 +134,26 @@ class ChatService implements IChatService
         if ($chat->getCreator()->getId() !== $sender->getId() || $chat->isClosed()) {
             throw new ChatException(trans('chats.close_error'));
         }
-        $chatId = $chat->getId();
 
-        $chatUsers = $chat->getUsers();
-        /**
-         * Chat to delete.
-         *
-         * @var Model $chat
-         */
-        $this->chatEntityService->delete($chat);
-        event(new ChatClosedEvent($chatId));
-        foreach ($chatUsers as $chatUser) {
-            if ($chatUser->getId() === $sender->getId()) {
-                continue;
+        $this->handleTransaction(function () use ($chat, $sender) {
+            $chatId = $chat->getId();
+            $chatUsers = $chat->getUsers();
+            /**
+             * Chat to delete.
+             *
+             * @var Model $chat
+             */
+            $this->chatEntityService->update($chat, [
+                Chat::IS_CLOSED => true,
+            ]);
+            event(new ChatClosedEvent($chatId));
+            foreach ($chatUsers as $chatUser) {
+                if ($chatUser->getId() === $sender->getId()) {
+                    continue;
+                }
+                $this->dispatcher->sendNow([$chatUser], new ChatClosedNotification());
             }
-            $this->dispatcher->sendNow([$chatUser], new ChatClosedNotification());
-        }
+        });
     }
 
     /**
@@ -215,6 +219,28 @@ class ChatService implements IChatService
             $this->participantEntityService->delete($chatParticipant);
 
             event(new ChatLeavedEvent($chat, $chatUser));
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function markChatAsRead(IChat $chat, IChatUser $chatUser): void
+    {
+        if (!$chat->inChat($chatUser) || $chat->isClosed()) {
+            throw new ChatException('chats.leave_error');
+        }
+
+        $this->handleTransaction(function () use ($chat, $chatUser) {
+            /**
+             * Chat participant.
+             *
+             * @var ChatParticipant $chatParticipant
+             */
+            $chatParticipant = $chatUser->getChatParticipant($chat);
+            $this->participantEntityService->update($chatParticipant, [
+                ChatParticipant::IS_READ => true,
+            ]);
         });
     }
 

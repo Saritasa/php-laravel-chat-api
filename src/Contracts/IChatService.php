@@ -56,4 +56,14 @@ interface IChatService
      * @throws ChatException
      */
     public function leaveChat(IChat $chat, IChatUser $chatUser): void;
+
+    /**
+     * Mark chat as read for user.
+     *
+     * @param IChat $chat
+     * @param IChatUser $chatUser
+     *
+     * @throws ChatException
+     */
+    public function markChatAsRead(IChat $chat, IChatUser $chatUser): void;
 }

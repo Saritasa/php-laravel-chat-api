@@ -24,7 +24,7 @@ interface IChatParticipant
     /**
      * Is notification on in the chat ?
      *
-     * @return bool
+     * @return boolean
      */
     public function isNotificationOn(): bool;
 
@@ -34,4 +34,11 @@ interface IChatParticipant
      * @return string
      */
     public function getId(): string;
+
+    /**
+     * Is chat read by user ?
+     *
+     * @return boolean
+     */
+    public function isRead(): bool;
 }
