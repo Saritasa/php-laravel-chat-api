@@ -13,7 +13,9 @@ abstract class ChatEvent implements ShouldBroadcastNow
 {
     use SerializesModels;
 
-    /** Pool chat event channel prefix */
+    /**
+     * Pool chat event channel prefix.
+     */
     public const CHANNEL_PREFIX = 'CHAT-';
 
     /**
@@ -26,7 +28,7 @@ abstract class ChatEvent implements ShouldBroadcastNow
     /**
      * Base class for all chat events.
      *
-     * @param string $chatId
+     * @param string $chatId Chat identifier
      */
     public function __construct(string $chatId)
     {

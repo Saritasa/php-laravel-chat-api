@@ -33,7 +33,7 @@ interface IChat
     /**
      * Check whether the user is a participant of the chat.
      *
-     * @param IChatUser $chatUser
+     * @param IChatUser $chatUser User fot check is he participant of chat
      *
      * @return boolean
      */

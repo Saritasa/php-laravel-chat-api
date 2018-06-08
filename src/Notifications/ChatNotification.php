@@ -12,11 +12,9 @@ class ChatNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $user
-     *
      * @return array
      */
-    public function via($user): array
+    public function via(): array
     {
         return [];
     }

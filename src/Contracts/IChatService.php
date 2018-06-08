@@ -13,9 +13,9 @@ interface IChatService
     /**
      * Create new conversation.
      *
-     * @param IChatUser $creator
-     * @param array $chatData
-     * @param array $userIds
+     * @param IChatUser $creator Creator of chat
+     * @param array $chatData Chat information
+     * @param array $userIds Chat participants ids
      *
      * @return IChat
      *
@@ -26,8 +26,8 @@ interface IChatService
     /**
      * Close conversation.
      *
-     * @param IChatUser $sender
-     * @param IChat $chat
+     * @param IChatUser $sender User which initiate closing
+     * @param IChat $chat Chat which is closing
      *
      * @throws ChatException
      * @throws EntityServiceOperationException
@@ -37,9 +37,9 @@ interface IChatService
     /**
      * Send message in chat.
      *
-     * @param IChatUser $sender
-     * @param IChat $chat
-     * @param string $message
+     * @param IChatUser $sender User which send new message in chat
+     * @param IChat $chat Chat to which user user send message
+     * @param string $message Message text
      *
      * @return IChatMessage
      *
@@ -50,8 +50,8 @@ interface IChatService
     /**
      * Leave chat.
      *
-     * @param IChat $chat
-     * @param IChatUser $chatUser
+     * @param IChat $chat Chat which leave by user
+     * @param IChatUser $chatUser User User which leaves chat
      *
      * @throws ChatException
      */
@@ -60,8 +60,8 @@ interface IChatService
     /**
      * Mark chat as read for user.
      *
-     * @param IChat $chat
-     * @param IChatUser $chatUser
+     * @param IChat $chat Chat to mark as read for user
+     * @param IChatUser $chatUser User which read chat messages
      *
      * @throws ChatException
      */
