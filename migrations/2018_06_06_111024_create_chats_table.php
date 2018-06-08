@@ -21,7 +21,7 @@ class CreateChatsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign(['created_by'])->on(config('laravelChatApi.usersTable'))->references('id');
+            $table->foreign(['created_by'])->on(config('laravel_chat_api.usersTable'))->references('id');
         });
     }
 
