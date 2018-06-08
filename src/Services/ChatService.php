@@ -227,12 +227,29 @@ class ChatService implements IChatService
         }
 
         $this->handleTransaction(function () use ($chat, $chatUser) {
+
             $chatParticipant = $this->participantEntityService->getRepository()->findWhere([
                 ChatParticipant::USER_ID => $chatUser->getId(),
                 ChatParticipant::CHAT_ID => $chat->getId(),
             ]);
 
             $this->participantEntityService->delete($chatParticipant);
+
+            if ($chat->getCreator() === $chatUser) {
+                $newCreator = null;
+                foreach ($chat->getUsers() as $user) {
+                    if ($user !== $chatUser) {
+                        $newCreator = $user;
+                        break;
+                    }
+                }
+                /**
+                 * Chat participant.
+                 *
+                 * @var Chat $chat
+                 */
+                $this->chatEntityService->update($chat, [Chat::CREATED_BY => $newCreator->getId()]);
+            }
 
             event(new ChatLeavedEvent($chat, $chatUser));
         });
