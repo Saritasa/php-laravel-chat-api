@@ -28,6 +28,7 @@ class LaravelChatApiServiceProvider extends ServiceProvider
             'laravel_chat_api'
         );
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel_chat_api.php', 'laravel_chat_api');
+        $this->registerBindings();
     }
 
     /**
