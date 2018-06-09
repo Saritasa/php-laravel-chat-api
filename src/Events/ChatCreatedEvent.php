@@ -2,6 +2,7 @@
 
 namespace Saritasa\LaravelChatApi\Events;
 
+use Illuminate\Broadcasting\PrivateChannel;
 use Saritasa\LaravelChatApi\Contracts\IChat;
 use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
@@ -10,12 +11,21 @@ use Saritasa\LaravelChatApi\Contracts\IChatUser;
  */
 class ChatCreatedEvent extends ChatEvent
 {
+    public const CHANNEL_PREFIX = 'chatCreated.';
+
     /**
      * Participant of chat which need to be notified.
      *
      * @var IChatUser
      */
     public $chatParticipant;
+
+    /**
+     * Created chat.
+     *
+     * @var IChat
+     */
+    public $chat;
 
     /**
      * Dispatched when chat created.
@@ -27,5 +37,16 @@ class ChatCreatedEvent extends ChatEvent
     {
         parent::__construct($chat->getId());
         $this->chatParticipant = $chatUser;
+        $this->chat = $chat;
+    }
+
+    /**
+     * Get the channels the event should be broadcast on.
+     *
+     * @return PrivateChannel
+     */
+    public function broadcastOn(): PrivateChannel
+    {
+        return new PrivateChannel(static::CHANNEL_PREFIX . $this->chatParticipant->getId());
     }
 }
