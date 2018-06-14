@@ -14,9 +14,11 @@ use Saritasa\LaravelChatApi\Contracts\INotificationsFactory;
 use Saritasa\LaravelChatApi\Enums\NotificationsType;
 use Saritasa\LaravelChatApi\Events\ChatClosedEvent;
 use Saritasa\LaravelChatApi\Contracts\IChatService;
+use Saritasa\LaravelChatApi\Events\ChatClosedUserEvent;
 use Saritasa\LaravelChatApi\Events\ChatCreatedEvent;
 use Saritasa\LaravelChatApi\Events\ChatLeavedEvent;
 use Saritasa\LaravelChatApi\Events\MessageSentEvent;
+use Saritasa\LaravelChatApi\Events\MessageSentUserEvent;
 use Saritasa\LaravelChatApi\Exceptions\ChatException;
 use Saritasa\LaravelChatApi\Models\Chat;
 use Saritasa\LaravelChatApi\Models\ChatMessage;
@@ -165,6 +167,7 @@ class ChatService implements IChatService
                     [$chatUser],
                     $this->notificationsFactory->build(NotificationsType::CHAT_CLOSED)
                 );
+                event(new ChatClosedUserEvent($chatUser->getId(), $chatId));
             }
         });
     }
@@ -189,9 +192,7 @@ class ChatService implements IChatService
                 'chat_id' => $chat->getId(),
                 'message' => $message
             ]);
-
             event(new MessageSentEvent($chat, $sender, $chatMessage));
-
             foreach ($chat->getUsers() as $chatUser) {
                 if ($chatUser->getId() === $sender->getId()) {
                     continue;
@@ -211,6 +212,7 @@ class ChatService implements IChatService
                     );
                 }
                 $this->participantEntityService->update($chatParticipant, [ChatParticipant::IS_READ => false]);
+                event(new MessageSentUserEvent($chatUser, $chat, $sender, $chatMessage));
             }
 
             return $chatMessage;
