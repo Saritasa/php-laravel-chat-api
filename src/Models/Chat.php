@@ -40,6 +40,7 @@ class Chat extends Model implements IChat
         self::NAME,
         self::IS_CLOSED,
         self::CREATED_BY,
+        self::UPDATED_AT,
     ];
 
     public $dates = [

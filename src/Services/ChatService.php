@@ -2,6 +2,7 @@
 
 namespace Saritasa\LaravelChatApi\Services;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
@@ -214,6 +215,14 @@ class ChatService implements IChatService
                 $this->participantEntityService->update($chatParticipant, [ChatParticipant::IS_READ => false]);
                 event(new MessageSentUserEvent($chatUser, $chat, $sender, $chatMessage));
             }
+
+            /**
+             * Chat to update.
+             *
+             * @var Model $chat
+             */
+            $this->chatEntityService->update($chat, [Chat::UPDATED_AT => Carbon::now()]);
+
 
             return $chatMessage;
         });
