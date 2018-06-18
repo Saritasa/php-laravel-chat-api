@@ -153,14 +153,7 @@ class ChatService implements IChatService
         $this->handleTransaction(function () use ($chat, $sender) {
             $chatId = $chat->getId();
             $chatUsers = $chat->getUsers();
-            /**
-             * Chat to delete.
-             *
-             * @var Model $chat
-             */
-            $this->chatEntityService->update($chat, [
-                Chat::IS_CLOSED => true,
-            ]);
+
             event(new ChatClosedEvent($chatId));
             foreach ($chatUsers as $chatUser) {
                 $this->markChatAsRead($chat, $chatUser);
@@ -173,6 +166,14 @@ class ChatService implements IChatService
                 );
                 event(new ChatClosedUserEvent($chatUser->getId(), $chatId));
             }
+            /**
+             * Chat to close.
+             *
+             * @var Model $chat
+             */
+            $this->chatEntityService->update($chat, [
+                Chat::IS_CLOSED => true,
+            ]);
         });
     }
 
