@@ -316,6 +316,14 @@ class ChatService implements IChatService
                 [$user],
                 $this->notificationsFactory->build(NotificationsType::CHAT_REOPENED)
             );
+
+            $chatParticipant = $chatUser->getChatParticipant($chat);
+            /**
+             * Chat participant.
+             *
+             * @var Model $chatParticipant
+             */
+            $this->participantEntityService->update($chatParticipant, [ChatParticipant::IS_READ => false]);
             event(new ChatReopenedUserEvent($user->getId(), $chat->getId()));
         }
     }
