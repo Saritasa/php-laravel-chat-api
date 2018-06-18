@@ -39,6 +39,8 @@ class NotificationsFactory implements INotificationsFactory
                 return $this->application->make(config('laravel_chat_api.notifications.newMessage'));
             case NotificationsType::CHAT_CLOSED:
                 return $this->application->make(config('laravel_chat_api.notifications.chatClosed'));
+            case NotificationsType::CHAT_REOPENED:
+                return $this->application->make(config('laravel_chat_api.notifications.chatReopened'));
             default:
                 return $this->application->make(config('laravel_chat_api.notifications.newMessage'));
         }

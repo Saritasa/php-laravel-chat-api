@@ -18,6 +18,8 @@ use Saritasa\LaravelChatApi\Contracts\IChatService;
 use Saritasa\LaravelChatApi\Events\ChatClosedUserEvent;
 use Saritasa\LaravelChatApi\Events\ChatCreatedEvent;
 use Saritasa\LaravelChatApi\Events\ChatLeavedEvent;
+use Saritasa\LaravelChatApi\Events\ChatReopenedEvent;
+use Saritasa\LaravelChatApi\Events\ChatReopenedUserEvent;
 use Saritasa\LaravelChatApi\Events\MessageSentEvent;
 use Saritasa\LaravelChatApi\Events\MessageSentUserEvent;
 use Saritasa\LaravelChatApi\Exceptions\ChatException;
@@ -304,6 +306,18 @@ class ChatService implements IChatService
          * @var Model $chat
          */
         $this->chatEntityService->update($chat, [Chat::IS_CLOSED => 0]);
+
+        event(new ChatReopenedEvent($chat->getId()));
+        foreach ($chat->getUsers() as $user) {
+            if ($chatUser->getId() === $user->getId()) {
+                continue;
+            }
+            $this->dispatcher->sendNow(
+                [$user],
+                $this->notificationsFactory->build(NotificationsType::CHAT_REOPENED)
+            );
+            event(new ChatReopenedUserEvent($user->getId(), $chat->getId()));
+        }
     }
 
     /**

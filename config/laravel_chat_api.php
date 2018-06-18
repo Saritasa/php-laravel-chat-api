@@ -8,5 +8,6 @@ return [
     'notifications' => [
         'chatClosed' => \Saritasa\LaravelChatApi\Notifications\ChatNotification::class,
         'newMessage' => \Saritasa\LaravelChatApi\Notifications\ChatNotification::class,
+        'chatReopened' => \Saritasa\LaravelChatApi\Notifications\ChatNotification::class,
     ],
 ];
