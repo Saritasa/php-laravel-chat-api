@@ -2,6 +2,7 @@
 
 namespace Saritasa\LaravelChatApi\Contracts;
 
+use Illuminate\Validation\ValidationException;
 use Saritasa\LaravelChatApi\Exceptions\ChatException;
 use Saritasa\LaravelEntityServices\Exceptions\EntityServiceOperationException;
 
@@ -66,4 +67,16 @@ interface IChatService
      * @throws ChatException
      */
     public function markChatAsRead(IChat $chat, IChatUser $chatUser): void;
+
+    /**
+     * Reopen closed chat.
+     *
+     * @param IChat $chat Chat to reopen
+     * @param IChatUser $chatUser User which trying to reopen
+     *
+     * @throws ChatException
+     * @throws ValidationException
+     * @throws EntityServiceOperationException
+     */
+    public function reopenChat(IChat $chat, IChatUser $chatUser): void;
 }

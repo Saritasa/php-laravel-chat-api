@@ -9,5 +9,6 @@ return [
     'notification_off' => 'Turned notification off',
     'close_error' => 'Chat already closed.',
     'send_error' => 'Can\'t send message.',
-    'leave_error' => 'Can\'t send message.',
+    'leave_error' => 'Can\'t leave chat.',
+    'reopen_error' => 'Can\'t reopen chat.',
 ];

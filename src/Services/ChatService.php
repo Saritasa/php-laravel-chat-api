@@ -145,7 +145,7 @@ class ChatService implements IChatService
     public function closeChat(IChatUser $sender, IChat $chat): void
     {
         if ($chat->getCreator()->getId() !== $sender->getId() || $chat->isClosed()) {
-            throw new ChatException(trans('chats.close_error'));
+            throw new ChatException(trans(trans('chats.close_error')));
         }
 
         $this->handleTransaction(function () use ($chat, $sender) {
@@ -161,6 +161,7 @@ class ChatService implements IChatService
             ]);
             event(new ChatClosedEvent($chatId));
             foreach ($chatUsers as $chatUser) {
+                $this->markChatAsRead($chat, $chatUser);
                 if ($chatUser->getId() === $sender->getId()) {
                     continue;
                 }
@@ -179,14 +180,14 @@ class ChatService implements IChatService
     public function sendMessage(IChatUser $sender, IChat $chat, string $message): IChatMessage
     {
         if (!$chat->inChat($sender) || $chat->isClosed()) {
-            throw new ChatException(trans('chats.send_error'));
+            throw new ChatException(trans(trans('chats.send_error')));
         }
 
         return $this->handleTransaction(function () use ($sender, $chat, $message) {
             /**
              * Chat message.
              *
-             * @var ChatMessage $chatMessage
+             * @var IChatMessage $chatMessage
              */
             $chatMessage = $this->entityServiceFactory->build(ChatMessage::class)->create([
                 'user_id' => $sender->getId(),
@@ -199,11 +200,6 @@ class ChatService implements IChatService
                     continue;
                 }
 
-                /**
-                 * Chat participant.
-                 *
-                 * @var ChatParticipant $chatParticipant
-                 */
                 $chatParticipant = $chatUser->getChatParticipant($chat);
 
                 if ($chatParticipant->isNotificationOn()) {
@@ -212,6 +208,11 @@ class ChatService implements IChatService
                         $this->notificationsFactory->build(NotificationsType::NEW_MESSAGE)
                     );
                 }
+                /**
+                 * Chat participant.
+                 *
+                 * @var Model $chatParticipant
+                 */
                 $this->participantEntityService->update($chatParticipant, [ChatParticipant::IS_READ => false]);
                 event(new MessageSentUserEvent($chatUser, $chat, $sender, $chatMessage));
             }
@@ -234,7 +235,7 @@ class ChatService implements IChatService
     public function leaveChat(IChat $chat, IChatUser $chatUser): void
     {
         if (!$chat->inChat($chatUser) || $chat->isClosed()) {
-            throw new ChatException('chats.leave_error');
+            throw new ChatException(trans('chats.leave_error'));
         }
 
         $this->handleTransaction(function () use ($chat, $chatUser) {
@@ -257,7 +258,7 @@ class ChatService implements IChatService
                 /**
                  * Chat participant.
                  *
-                 * @var Chat $chat
+                 * @var Model $chat
                  */
                 $this->chatEntityService->update($chat, [Chat::CREATED_BY => $newCreator->getId()]);
             }
@@ -272,20 +273,37 @@ class ChatService implements IChatService
     public function markChatAsRead(IChat $chat, IChatUser $chatUser): void
     {
         if (!$chat->inChat($chatUser) || $chat->isClosed()) {
-            throw new ChatException('chats.leave_error');
+            throw new ChatException(trans('chats.leave_error'));
         }
 
         $this->handleTransaction(function () use ($chat, $chatUser) {
             /**
              * Chat participant.
              *
-             * @var ChatParticipant $chatParticipant
+             * @var Model $chatParticipant
              */
             $chatParticipant = $chatUser->getChatParticipant($chat);
             $this->participantEntityService->update($chatParticipant, [
                 ChatParticipant::IS_READ => true,
             ]);
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reopenChat(IChat $chat, IChatUser $chatUser): void
+    {
+        if (!$chat->inChat($chatUser) || !$chat->isClosed()) {
+            throw new ChatException(trans('chats.reopen_error'));
+        }
+
+        /**
+         * Chat to reopen.
+         *
+         * @var Model $chat
+         */
+        $this->chatEntityService->update($chat, [Chat::IS_CLOSED => 0]);
     }
 
     /**
