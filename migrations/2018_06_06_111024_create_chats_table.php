@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateChatsTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Creates chats table with foreign key on application users table.
      *
      * @return void
      */
@@ -26,7 +26,7 @@ class CreateChatsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Drop chats table.
      *
      * @return void
      */
