@@ -225,8 +225,8 @@ class ChatService implements IChatService
              *
              * @var Model $chat
              */
-            $this->chatEntityService->update($chat, [Chat::UPDATED_AT => Carbon::now()]);
-
+            $chat->setUpdatedAt(Carbon::now());
+            $this->chatEntityService->update($chat, []);
 
             return $chatMessage;
         });
