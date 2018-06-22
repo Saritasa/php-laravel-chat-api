@@ -11,7 +11,7 @@
          bootstrap="test/bootstrap.php"
 >
   <testsuites>
-    <testsuite name="Saritasa Transformers Test Suite">
+    <testsuite name="Saritasa Laravel chat api test suite">
       <directory>./tests/</directory>
     </testsuite>
   </testsuites>

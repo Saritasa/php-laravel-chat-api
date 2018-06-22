@@ -1,71 +1,101 @@
 <?php
 
-namespace Saritasa\Laravel\Chat\Models;
+namespace Saritasa\LaravelChatApi\Models;
 
-use Illuminate\Database\Query\Builder;
-use Saritasa\Database\Eloquent\Entity;
-use Saritasa\Database\Eloquent\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Saritasa\LaravelChatApi\Contracts\IChat;
+use Saritasa\LaravelChatApi\Contracts\IChatMessage;
+use Saritasa\LaravelChatApi\Contracts\IChatUser;
 
 /**
- * App\Model\Entities\ChatMessage
+ * Message which user send in chat.
  *
- * @property integer $id
- * @property integer $chat_id
- * @property integer $user_id
- * @property string $message
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property User $user
- * @property Chat $chat
- * @method static Builder|ChatMessage whereId($value)
- * @method static Builder|ChatMessage whereUserId($value)
- * @method static Builder|ChatMessage whereMessage($value)
- * @method static Builder|ChatMessage whereChatId($value)
- * @method static Builder|ChatMessage whereCreatedAt($value)
- * @method static Builder|ChatMessage whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property int $id Id
+ * @property int $chat_id Chat identifier
+ * @property int $user_id User identifier
+ * @property string $message Message text
+ * @property Carbon $created_at Date when user join in chat
+ * @property Carbon $updated_at Update information date
+ *
+ * @property IChatUser $user User which one send this message in chat
+ * @property Chat $chat Chat where this message is
  */
-class ChatMessage extends Entity
+class ChatMessage extends Model implements IChatMessage
 {
-    public $timestamps = true;
+    public const CHAT_ID = 'chat_id';
+    public const USER_ID = 'user_id';
+    public const MESSAGE = 'message';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
 
     protected $fillable = [
-        'chat_id',
-        'user_id',
-        'message',
+        self::CHAT_ID,
+        self::USER_ID,
+        self::MESSAGE,
     ];
 
-    protected $guarded = [];
+    protected $dates = [
+        self::CREATED_AT,
+        self::UPDATED_AT,
+    ];
 
     /**
-     * Return common validation rules of all user fields
+     * User which one send this message in chat.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(config('laravel_chat_api.userModelClass'));
+    }
+
+    /**
+     * Get chat where this message is.
+     *
+     * @return BelongsTo
+     */
+    public function chat(): BelongsTo
+    {
+        return $this->belongsTo(config('laravel_chat_api.chatModelClass'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUser(): IChatUser
+    {
+        return $this->user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getChat(): IChat
+    {
+        return $this->chat;
+    }
+
+    /**
+     * Return validation rules.
      *
      * @return array
      */
-    public static function authRules()
+    public function getValidationRules(): array
     {
         return [
-            'message' => 'required|max:500',
+            static::MESSAGE => 'required|string',
+            static::USER_ID => 'required|exists:' . config('laravel_chat_api.usersTable') . ',id',
+            static::CHAT_ID => 'required|exists:' . config('laravel_chat_api.chatsTable') . ',id',
         ];
-    }
-
-    /**
-     * Get user object
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get chat object
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function chat()
-    {
-        return $this->belongsTo(Chat::class);
     }
 }

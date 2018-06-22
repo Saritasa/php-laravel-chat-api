@@ -7,16 +7,23 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Base class for all chat events.
+ * Base class for all user chat events.
  */
-abstract class ChatEvent implements ShouldBroadcastNow
+abstract class UserEvent implements ShouldBroadcastNow
 {
     use SerializesModels;
 
     /**
      * Pool chat event channel prefix.
      */
-    public const CHANNEL_PREFIX = 'CHAT-';
+    public const CHANNEL_PREFIX = 'userChat.';
+
+    /**
+     * User identifier.
+     *
+     * @var string
+     */
+    public $userId;
 
     /**
      * Chat identifier.
@@ -28,11 +35,13 @@ abstract class ChatEvent implements ShouldBroadcastNow
     /**
      * Base class for all chat events.
      *
+     * @param string $userId User identifier
      * @param string $chatId Chat identifier
      */
-    public function __construct(string $chatId)
+    public function __construct(string $userId, string $chatId)
     {
         $this->chatId = $chatId;
+        $this->userId = $userId;
     }
 
     /**
@@ -54,6 +63,6 @@ abstract class ChatEvent implements ShouldBroadcastNow
      */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel(static::CHANNEL_PREFIX . $this->chatId);
+        return new PrivateChannel(static::CHANNEL_PREFIX . $this->userId);
     }
 }
