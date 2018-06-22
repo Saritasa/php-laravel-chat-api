@@ -49,7 +49,20 @@ thrown.
 ```php  
  $chatService->markChatAsRead($chat, $user);
  ```
-  
+### Events:
+## Chat events:
+Throws in chat channel for all subscribers who participate in chatting.
+
+- MessageSentEvent throws when participant sent new message in chat.
+- ChatLeavedEvent throws when one of participants leaved this chat.
+- ChatClosedEvent throws when creator closed this chat.
+## User events:
+Throws in user channel for all subscribers who participate in chatting exclude event initiator.
+- ChatCreatedEvent throws when user created new chat.
+- MessageSentEvent throws when participant sent new message in chat.
+- ChatClosedUserEvent throws when creator closed this chat.
+- ChatReopenedUserEvent throws when creator reopened closed chat.
+
 ## Contributing  
   
 1. Create fork  
