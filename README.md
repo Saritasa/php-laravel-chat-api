@@ -1,18 +1,21 @@
 
 # Laravel Chat Api    
- Service for integration chat functionality in your project.    
+Adds chat functionality for your project on top of Laravel [Broadcasting](https://laravel.com/docs/broadcasting) feature.
     
-## Laravel 5.5    
-    
- ## Installation and configuration Install the ```saritasa/laravel-chat-api``` package:    
-    
-```bash $ composer require saritasa/laravel-chat-api ```    
+## Laravel 5.5+
+Lower versions are not supported.
+
+### Installation and configuration Install the ```saritasa/laravel-chat-api``` package:    
+
+```bash $ composer require saritasa/laravel-chat-api ```
  Publish config with    
-```bash $ artisan vendor:publish --tag=laravel_chat_api ```    
+```bash $ artisan vendor:publish --tag=laravel_chat_api ```
  Update config/laravel_chat_api.php sections:    
 - Implement IChatUser contract to your application user model and update parameter `userModelClass`.     
 - Check notifications section and add your own notification instead this mocks.     
-    
+
+Configure at least one [broadcasting driver](https://laravel.com/docs/broadcasting#driver-prerequisites)
+
 ## Work with service Add IChatService contract injection in needed class.    
 ### Methods: - Create chat    
 ```php    
