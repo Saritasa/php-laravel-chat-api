@@ -1,10 +1,16 @@
+# Changes History
+
+2.1.0
+-----
+Declare compatibility with Laravel 6
+
 2.0.0
+-----
 Update namespaces. Add chatService with chat business-logic.
 Add config for laravel. Add contracts for all models and services.
 
 1.0.0
 -----
-
 - Initial version
 Models: Chat, ChatParticipant, ChatMessage
 Controller: ChatController

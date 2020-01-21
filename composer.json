@@ -12,15 +12,15 @@
     ],
     "require": {
         "php": ">=7.1",
-        "illuminate/http": "5.5",
-        "illuminate/support": "5.5",
+        "illuminate/http": "^5.5 || ^6.0",
+        "illuminate/support": "^5.5 || ^6.0",
         "saritasa/laravel-entity-services": "^1.0",
-        "dingo/api": "2.0.0-alpha1"
+        "dingo/api": "^2.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^6.5",
-        "squizlabs/php_codesniffer": "^3.0"
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "minimum-stability": "stable",
     "autoload": {

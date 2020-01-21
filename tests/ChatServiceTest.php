@@ -3,6 +3,7 @@
 namespace Saritasa\LaravelChatApi\Tests;
 
 use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Support\Str;
 use League\Flysystem\Config;
 use PHPUnit\Framework\TestCase;
 use Mockery;
@@ -225,7 +226,7 @@ class ChatServiceTest extends TestCase
         );
 
         $chatData = [
-            Chat::NAME => str_random(),
+            Chat::NAME => Str::random(),
             Chat::CREATED_BY => $creatorId,
         ];
 
