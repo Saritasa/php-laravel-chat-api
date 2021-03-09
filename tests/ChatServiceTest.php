@@ -125,7 +125,7 @@ class ChatServiceTest extends TestCase
 
         $this->eventDispatcher = Mockery::mock(Translator::class);
         $this->eventDispatcher->shouldReceive('trans');
-        $this->eventDispatcher->shouldReceive('get')->andReturn('Mocked tranlation');
+        $this->eventDispatcher->shouldReceive('get')->andReturn('Mocked translation');
         app()->instance('translator', $this->eventDispatcher);
     }
 
