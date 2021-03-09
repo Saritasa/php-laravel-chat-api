@@ -85,6 +85,13 @@ class ChatServiceTest extends TestCase
      * @var MockInterface|IChatUser
      */
     protected $eventDispatcher;
+    
+    /**
+     * Event dispatcher mock.
+     *
+     * @var MockInterface|Translator
+     */
+    protected $translator;
 
     /**
      * Prepare configuration and mocks needed to testing.
@@ -123,10 +130,9 @@ class ChatServiceTest extends TestCase
         $this->eventDispatcher->shouldReceive('dispatch');
         app()->instance('events', $this->eventDispatcher);
 
-        $this->eventDispatcher = Mockery::mock(Translator::class);
-        $this->eventDispatcher->shouldReceive('trans');
-        $this->eventDispatcher->shouldReceive('get')->andReturn('Mocked translation');
-        app()->instance('translator', $this->eventDispatcher);
+        $this->translator = Mockery::mock(Translator::class);
+        $this->translator->shouldReceive('trans');
+        app()->instance('translator', $this->translator);
     }
 
     /**
@@ -264,6 +270,7 @@ class ChatServiceTest extends TestCase
         $chat->shouldReceive('getCreator')->andReturn($this->buildChatUserMock($actualCreatorId));
 
         $this->expectException(ChatException::class);
+        $this->translator->shouldReceive('get')->andReturn('Mocked translation');
         $service->closeChat($this->chatUserMock, $chat);
     }
 
@@ -292,6 +299,7 @@ class ChatServiceTest extends TestCase
         $chat->shouldReceive('isClosed')->andReturn(true);
 
         $this->expectException(ChatException::class);
+        $this->translator->shouldReceive('get')->andReturn('Mocked translation');
         $service->closeChat($this->chatUserMock, $chat);
     }
 
