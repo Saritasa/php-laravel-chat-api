@@ -1,0 +1,40 @@
+name: PHP Unit
+
+on: [push, pull_request]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '7.1', '7.2', '7.3', '7.4' ]
+    name: PHP ${{ matrix.php-versions }} - PHPUnit
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: xdebug
+          
+      - name: Check PHP Version
+        run: php -v
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --dev --prefer-dist --no-progress --no-suggest --no-interaction
+
+      - name: Run test suite
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+          
+      - name: Upload Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          fail_ci_if_error: false
+          verbose: true

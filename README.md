@@ -1,3 +1,6 @@
+[![PHP Unit](https://github.com/Saritasa/php-laravel-chat-api/workflows/PHP%20Unit/badge.svg)](https://github.com/Saritasa/php-laravel-chat-api/actions)
+[![PHP CodeSniffer](https://github.com/Saritasa/php-laravel-chat-api/workflows/PHP%20Codesniffer/badge.svg)](https://github.com/Saritasa/php-laravel-chat-api/actions)
+[![codecov](https://codecov.io/gh/Saritasa/php-laravel-chat-api/branch/master/graph/badge.svg)](https://codecov.io/gh/Saritasa/php-laravel-chat-api)
 
 # Laravel Chat Api    
 Adds chat functionality for your project on top of Laravel [Broadcasting](https://laravel.com/docs/broadcasting) feature.
