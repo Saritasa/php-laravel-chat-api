@@ -146,7 +146,7 @@ class ChatService implements IChatService
     public function closeChat(IChatUser $sender, IChat $chat): void
     {
         if ($chat->getCreator()->getId() !== $sender->getId() || $chat->isClosed()) {
-            throw new ChatException(trans(trans('chats.close_error')));
+            throw new ChatException(trans('chats.close_error'));
         }
 
         $this->handleTransaction(function () use ($chat, $sender) {
@@ -182,7 +182,7 @@ class ChatService implements IChatService
     public function sendMessage(IChatUser $sender, IChat $chat, string $message): IChatMessage
     {
         if (!$chat->inChat($sender) || $chat->isClosed()) {
-            throw new ChatException(trans(trans('chats.send_error')));
+            throw new ChatException(trans('chats.send_error'));
         }
 
         return $this->handleTransaction(function () use ($sender, $chat, $message) {
